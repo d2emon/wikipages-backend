@@ -1,0 +1,39 @@
+{
+  "name": "wikipages-backend",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Backend for wiki pages",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "seed": "tsx src/seed.ts",
+    "test": "echo \"TODO\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d2emon/wikipages-backend.git"
+  },
+  "keywords": [
+    "wiki",
+    "backend"
+  ],
+  "author": "Dmitry Kutsenko <d2emonium@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/d2emon/wikipages-backend/issues"
+  },
+  "homepage": "https://github.com/d2emon/wikipages-backend#readme",
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}
