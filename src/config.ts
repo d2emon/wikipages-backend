@@ -13,3 +13,7 @@ export const WIKI_DATA_DIR = process.env.WIKI_DATA_DIR
   : path.join(ROOT_DIR, 'data', 'wiki');
 
 export const WIKI_API_KEY = process.env.WIKI_API_KEY ?? '';
+export const WIKI_MAX_NOTE_BYTES = Number(
+  process.env.WIKI_MAX_NOTE_BYTES ?? 1024 * 1024,
+);
+  

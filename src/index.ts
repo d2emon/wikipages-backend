@@ -1,7 +1,9 @@
 import express from 'express';
 import type { ErrorRequestHandler } from 'express';
+import { ZodError } from 'zod';
 import { PORT, WIKI_API_KEY, WIKI_DATA_DIR } from './config';
 import { HttpError } from './errors';
+import apiRoutes from './routes/api';
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true });
 });
 
+app.use('/api/notes', apiRoutes);
+
 app.use((_req, res) => {
   res.status(404).json({ error: 'Path not found' });
 });
@@ -19,6 +23,15 @@ app.use((_req, res) => {
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof HttpError) {
     res.status(err.status).json({ error: err.message });
+    return;
+  }
+
+  if (err instanceof ZodError) {
+    res.status(400).json({
+      error:
+        err.issues.map((issue) => issue.message).filter(Boolean).join('; ') ||
+        'Invalid data',
+    });
     return;
   }
 
