@@ -4,6 +4,7 @@ import { ZodError } from 'zod';
 import { PORT, WIKI_API_KEY, WIKI_DATA_DIR } from './config';
 import { HttpError } from './errors';
 import apiRoutes from './routes/api';
+import wikiRoutes from './routes/wiki';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/notes', apiRoutes);
+app.use('/wiki', wikiRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Path not found' });
