@@ -1,7 +1,7 @@
 import {
-    escapeHtml,
-  } from './models/markdown';
-  import type { NoteMeta } from './models/notes';
+  escapeHtml,
+} from './models/markdown';
+import type { NoteMeta } from './models/notes';
 
 function encodePath(notePath: string): string {
   return notePath.split('/').map(encodeURIComponent).join('/');

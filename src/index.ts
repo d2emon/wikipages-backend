@@ -5,6 +5,7 @@ import { PORT, WIKI_API_KEY, WIKI_DATA_DIR } from './config';
 import { HttpError } from './errors';
 import apiRoutes from './routes/api';
 import wikiRoutes from './routes/wiki';
+import messages from './messages';
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use('/api/notes', apiRoutes);
 app.use('/wiki', wikiRoutes);
 
 app.use((_req, res) => {
-  res.status(404).json({ error: 'Path not found' });
+  res.status(404).json({ error: messages.PATH_NOT_FOUND });
 });
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
@@ -30,9 +31,8 @@ const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 
   if (err instanceof ZodError) {
     res.status(400).json({
-      error:
-        err.issues.map((issue) => issue.message).filter(Boolean).join('; ') ||
-        'Invalid data',
+      error: err.issues.map((issue) => issue.message).filter(Boolean).join('; ')
+        || messages.INVALID_DATA,
     });
     return;
   }
@@ -40,17 +40,17 @@ const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   const candidate = err as { type?: string; status?: number };
 
   if (candidate?.type === 'entity.too.large') {
-    res.status(413).json({ error: 'Request body is too large' });
+    res.status(413).json({ error: messages.REQUEST_TOO_LARGE });
     return;
   }
 
   if (err instanceof SyntaxError) {
-    res.status(400).json({ error: 'Incorrect JSON' });
+    res.status(400).json({ error: messages.INCORRECT_JSON });
     return;
   }
 
   console.error(err);
-  res.status(500).json({ error: 'Server internal error' });
+  res.status(500).json({ error: messages.SERVER_ERROR });
 };
 
 app.use(errorHandler);

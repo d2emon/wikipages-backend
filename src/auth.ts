@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import type { Request } from 'express';
 import { WIKI_API_KEY } from './config';
 import { HttpError } from './errors';
+import messages from './messages';
 
 function safeEqual(a: string, b: string): boolean {
   const left = Buffer.from(a);
@@ -39,13 +40,10 @@ export function isAuthorized(req: Request): boolean {
 
 export function assertWriteAccess(req: Request): void {
   if (!WIKI_API_KEY) {
-    throw new HttpError(
-      503,
-      'Write mode off: set WIKI_API_KEY in environment variables.',
-    );
+    throw new HttpError(503, messages.NO_API_KEY);
   }
 
   if (!isAuthorized(req)) {
-    throw new HttpError(401, 'API-key is required');
+    throw new HttpError(401, messages.UNAUTHORIZED);
   }
 }

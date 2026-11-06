@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { WIKI_DATA_DIR } from './config';
 import { hasAnyNotes } from './models/notes';
+import messages from './messages';
 
 const SEED_DIR = path.resolve(__dirname, '../seed');
 
@@ -27,22 +28,22 @@ async function copyTree(source: string, target: string): Promise<void> {
 
 async function main(): Promise<void> {
   if (await hasAnyNotes()) {
-    console.log('Wiki is not empty — data not seeded.');
+    console.log(messages.WIKI_IS_NOT_EMPTY);
     return;
   }
 
   try {
     await fs.access(SEED_DIR);
   } catch {
-    console.log('Folder seed not found — data not seeded.');
+    console.log(messages.SEED_NOT_FOUND);
     return;
   }
 
   await copyTree(SEED_DIR, WIKI_DATA_DIR);
-  console.log('Data is seeded.');
+  console.log(messages.SEED_OK);
 }
 
 main().catch((error: unknown) => {
-  console.error('Cannot seed data:', error);
+  console.error(messages.SEED_ERROR, error);
   process.exitCode = 1;
 });
